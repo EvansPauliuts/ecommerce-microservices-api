@@ -20,7 +20,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.createCustomer(customerRequest));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<Void> updateCustomer(
             @RequestBody @Valid CustomerRequest customerRequest
     ) {
