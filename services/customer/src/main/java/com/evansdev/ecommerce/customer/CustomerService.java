@@ -23,7 +23,8 @@ public class CustomerService {
     }
 
     public void updateCustomer(CustomerRequest customerRequest) {
-        var customer = customerRepository.findById(customerRequest.id())
+        var customer = customerRepository
+                .findById(customerRequest.id())
                 .orElseThrow(() -> new CustomerNotFoundException(
                     format("Cannot update customer:: No customer found with the provided ID:: %s", customerRequest.id())
                 ));
@@ -50,9 +51,29 @@ public class CustomerService {
     }
 
     public List<CustomerResponse> findAllCustomers() {
-        return customerRepository.findAll()
+        return customerRepository
+                .findAll()
                 .stream()
                 .map(customerMapper::fromCustomer)
                 .collect(Collectors.toList());
+    }
+
+    public Boolean existsById(String customerId) {
+        return customerRepository
+                .findById(customerId)
+                .isPresent();
+    }
+
+    public CustomerResponse findById(String customerId) {
+        return customerRepository
+                .findById(customerId)
+                .map(customerMapper::fromCustomer)
+                .orElseThrow(() -> new CustomerNotFoundException(
+                        format("No customer found with the provided ID:: %s", customerId)
+                ));
+    }
+
+    public void deleteCustomer(String customerId) {
+        customerRepository.deleteById(customerId);
     }
 }
